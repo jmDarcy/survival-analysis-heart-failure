@@ -1,0 +1,19 @@
+\begin{table}[htbp]
+\centering
+\caption{Syntetyczne porównanie zastosowanych modeli.}
+\label{tab:synthesis}
+\scriptsize
+\setlength{\tabcolsep}{2.4pt}
+\begin{tabular}{p{.22\textwidth}p{.18\textwidth}p{.26\textwidth}p{.26\textwidth}}
+\toprule
+Model & Rola & Główna zaleta & Główne ograniczenie \\
+\midrule
+Kaplan-Meier & opis empiryczny & brak założenia rozkładu & brak kontroli kowariant \\
+Weibull AFT pełny & model predykcyjny & profile przeżycia i hazardu & wrażliwość na rozkład \\
+Weibull AFT zredukowany & model interpretacyjny & mniej parametrów & może pomijać słabe efekty \\
+Cox podstawowy & model HR & interpretacja wielowymiarowa & naruszenie PH dla frakcji wyrzutowej \\
+Cox z EF x log(t) & diagnostyka PH & zmienny efekt frakcji wyrzutowej & trudniejsza interpretacja \\
+Bayes Weibull & rozszerzenie & posterior niepewności & model demonstracyjny \\
+\bottomrule
+\end{tabular}
+\end{table}
