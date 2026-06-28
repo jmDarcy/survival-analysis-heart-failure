@@ -1,0 +1,17 @@
+\begin{table}[htbp]
+\centering
+\caption{Porównanie definicji użytych w SAS i Pythonie.}
+\label{tab:sas-python}
+\small
+\begin{tabular}{llll}
+\toprule
+obszar & SAS & Python & ocena \\
+\midrule
+Definicja czasu & time & duration = time & zgodne \\
+Definicja zdarzenia & DEATH\_EVENT=1 & event = DEATH\_EVENT & zgodne \\
+Cenzurowanie & TIME time*DEATH\_EVENT(0) & event\_observed=DEATH\_EVENT & zgodne \\
+Estymator główny & PROC LIFETEST METHOD=LIFE & Kaplan-Meier + tablica aktuarialna & różne metody prezentacji \\
+Źródło różnic & agregacja w przedziałach aktuarialnych & KM liczy skoki w czasach zdarzeń & metodologiczne, nie błąd kodowania \\
+\bottomrule
+\end{tabular}
+\end{table}

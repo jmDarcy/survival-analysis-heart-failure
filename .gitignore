@@ -1,0 +1,35 @@
+# Python and Jupyter
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
+.venv/
+venv/
+
+# R and local sessions
+.Rhistory
+.RData
+.Rproj.user/
+
+# LaTeX build artifacts
+*.aux
+*.log
+*.out
+*.toc
+*.nav
+*.snm
+*.vrb
+*.synctex.gz
+
+# OS and editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Secrets and local configuration
+.env
+*.pem
+*.key
+
+# Locally rebuilt presentation duplicate
+presentation/main.pdf

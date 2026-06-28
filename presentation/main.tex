@@ -14,7 +14,7 @@
 \newcommand{\slidefig}[1]{\includegraphics[width=.88\textwidth,height=.62\textheight,keepaspectratio]{#1}}
 \newcommand{\widefig}[1]{\includegraphics[width=.94\textwidth,height=.66\textheight,keepaspectratio]{#1}}
 \newcommand{\slidetable}[1]{\begingroup\scriptsize\setlength{\tabcolsep}{2.4pt}\renewcommand{\arraystretch}{0.98}\input{#1}\endgroup}
-\graphicspath{{../Wykresy/}}
+\graphicspath{{../figures/}}
 \title{Analiza czasu trwania terapii i leczenia chorób serca}
 \author{Michał Zwierzewicz \and Jakub Mikołajczak \and Patryk Piasecki}
 \date{czerwiec 2026}
@@ -89,12 +89,12 @@ Zmienna & Znaczenie \\
 \bottomrule
 \end{tabular}
 \end{frame}
-\begin{frame}{Statystyki opisowe zmiennych ilościowych}\slidetable{../Tables/01_statystyki_opisowe.tex}\end{frame}
-\begin{frame}{Zmiennie binarne i zbinaryzowane}\slidetable{../Tables/01b_zmienne_binarne.tex}\end{frame}
+\begin{frame}{Statystyki opisowe zmiennych ilościowych}\slidetable{../tables/01_descriptive_statistics.tex}\end{frame}
+\begin{frame}{Zmiennie binarne i zbinaryzowane}\slidetable{../tables/01b_binary_variables.tex}\end{frame}
 \begin{frame}{Struktura zdarzeń i cenzurowania}
 \begin{columns}[T,totalwidth=\textwidth]
-\begin{column}{.42\textwidth}\slidetable{../Tables/02_struktura_cenzurowania.tex}\end{column}
-\begin{column}{.56\textwidth}\centering\slidefig{02_struktura_cenzurowania.pdf}\end{column}
+\begin{column}{.42\textwidth}\slidetable{../tables/02_censoring_structure.tex}\end{column}
+\begin{column}{.56\textwidth}\centering\slidefig{02_censoring_structure.pdf}\end{column}
 \end{columns}
 {\scriptsize W zbiorze odnotowano 96 zgonów oraz 203 obserwacji cenzurowanych prawostronnie. Udział cenzurowania wpływa na precyzję estymacji funkcji przeżycia, szczególnie w końcowym zakresie czasu obserwacji.}
 \end{frame}
@@ -112,8 +112,8 @@ Analiza nieparametryczna stanowi punkt odniesienia dla dalszego modelowania. Poz
 \end{itemize}
 \end{frame}
 \begin{frame}{Kaplan-Meier dla całej próby}\centering\widefig{03_kaplan_meier.pdf}\\[-.3em]{\scriptsize Zacieniowany obszar oznacza przedział ufności dla estymowanej funkcji przeżycia.}\end{frame}
-\begin{frame}{Tablica aktuarialna: wyniki}\slidetable{../Tables/04_tablica_aktuarialna.tex}\end{frame}
-\begin{frame}{Tablica aktuarialna: wykres}\centering\widefig{05_tablica_aktuarialna.pdf}\end{frame}
+\begin{frame}{Tablica aktuarialna: wyniki}\slidetable{../tables/04_actuarial_life_table.tex}\end{frame}
+\begin{frame}{Tablica aktuarialna: wykres}\centering\widefig{05_actuarial_life_table.pdf}\end{frame}
 \begin{frame}{Skumulowany hazard Nelsona-Aalena}
 \[
 \widehat{H}(t)=\sum_{t_i \le t}\frac{d_i}{n_i}
@@ -123,13 +123,13 @@ Skumulowany hazard rośnie wraz z narastaniem ryzyka zdarzenia wśród pacjentó
 \begin{frame}{Nelson-Aalen: wynik}\centering\widefig{04_nelson_aalen.pdf}\end{frame}
 \begin{frame}{Nieparametryczna funkcja hazardu}
 \centering
-\widefig{04b_hazard_smoothed_bw50.pdf}\\[-.3em]
+\widefig{04b_smoothed_hazard_bw50.pdf}\\[-.3em]
 {\scriptsize Wykres przedstawia wygładzoną funkcję hazardu Nelsona-Aalena dla pasma $bandwidth=50$. Krzywa pokazuje bieżącą intensywność zgonów w czasie, a zacieniowany obszar oznacza 95\% przedział ufności.}
 \end{frame}
-\begin{frame}{Kaplan-Meier dla podgrup I}\centering\widefig{06_km_podgrupy_1.pdf}\end{frame}
-\begin{frame}{Kaplan-Meier dla podgrup II}\centering\widefig{06_km_podgrupy_2.pdf}\end{frame}
-\begin{frame}{Kaplan-Meier dla podgrup III}\centering\widefig{06_km_podgrupy_3.pdf}\end{frame}
-\begin{frame}{Kaplan-Meier dla podgrup IV}\centering\widefig{06_km_podgrupy_4.pdf}\end{frame}
+\begin{frame}{Kaplan-Meier dla podgrup I}\centering\widefig{06_km_subgroup_1.pdf}\end{frame}
+\begin{frame}{Kaplan-Meier dla podgrup II}\centering\widefig{06_km_subgroup_2.pdf}\end{frame}
+\begin{frame}{Kaplan-Meier dla podgrup III}\centering\widefig{06_km_subgroup_3.pdf}\end{frame}
+\begin{frame}{Kaplan-Meier dla podgrup IV}\centering\widefig{06_km_subgroup_4.pdf}\end{frame}
 \begin{frame}{Testy log-rank i Wilcoxona}
 \[
 H_0:S_0(t)=S_1(t)\ \text{dla wszystkich}\ t,\qquad
@@ -137,7 +137,7 @@ H_1:S_0(t)\neq S_1(t)\ \text{dla co najmniej jednego}\ t.
 \]
 Test log-rank nadaje podobną wagę zdarzeniom w czasie, a test Wilcoxona silniej waży wcześniejsze zdarzenia.
 \end{frame}
-\begin{frame}{Wyniki testów nieparametrycznych}\slidetable{../Tables/05_testy_nieparametryczne.tex}\end{frame}
+\begin{frame}{Wyniki testów nieparametrycznych}\slidetable{../tables/05_nonparametric_tests.tex}\end{frame}
 \begin{frame}{Wnioski z części nieparametrycznej}
 Estymator Kaplana-Meiera pokazuje empiryczny spadek prawdopodobieństwa przeżycia bez narzucania rozkładu czasu trwania, natomiast estymator Nelsona-Aalena uzupełnia analizę o obraz narastania skumulowanego hazardu. Obie metody stanowią punkt odniesienia dla modeli parametrycznych i modelu Coxa.
 \end{frame}
@@ -154,7 +154,7 @@ Modele parametryczne opisują rozkład czasu przeżycia przez określoną rodzin
 \]
 W modelu AFT $\exp(\beta)$ jest współczynnikiem czasu, a nie hazard ratio.
 \end{frame}
-\begin{frame}{Porównanie modeli parametrycznych}\slidetable{../Tables/07_porownanie_modeli_parametrycznych.tex}\end{frame}
+\begin{frame}{Porównanie modeli parametrycznych}\slidetable{../tables/07_parametric_model_comparison.tex}\end{frame}
 \begin{frame}{Interpretacja porównania parametrycznego}
 Najniższe wartości kryteriów informacyjnych uzyskał model Weibull AFT. Model wykładniczy bez kowariant estymuje jeden parametr intensywności zdarzenia, ponieważ nie zawiera zmiennych objaśniających ani dodatkowego parametru kształtu.
 \end{frame}
@@ -172,11 +172,11 @@ Najniższe wartości kryteriów informacyjnych uzyskał model Weibull AFT. Model
 \item Oszacowany parametr kształtu $\hat{\rho}\approx0{,}96$ jest bliski 1, co wskazuje na hazard zbliżony do stałego i klinicznie interpretowalną strukturę modelu.
 \end{itemize}
 \end{frame}
-\begin{frame}{Parametry pełnego modelu Weibull AFT}\slidetable{../Tables/08_parametry_najlepszego_aft.tex}\end{frame}
-\begin{frame}{Model Weibull AFT zredukowany}\slidetable{../Tables/08b_parametry_aft_zredukowany.tex}\end{frame}
-\begin{frame}{Model pełny i zredukowany}\slidetable{../Tables/08c_aft_pelny_vs_zredukowany.tex}\end{frame}
-\begin{frame}{Profile przeżycia w modelu AFT}\centering\widefig{08c_weibull_profile_survival.pdf}\\[-.3em]{\scriptsize Profil wysokiego ryzyka charakteryzuje się szybszym spadkiem funkcji przeżycia w modelu Weibull AFT zredukowanym.}\end{frame}
-\begin{frame}{Hazard w modelu AFT}\centering\widefig{08e_weibull_profile_hazard.pdf}\\[-.3em]{\scriptsize Profile ryzyka różnią się poziomem hazardu, przy podobnym kształcie przebiegu wynikającym ze wspólnego parametru rozkładu Weibulla.}\end{frame}
+\begin{frame}{Parametry pełnego modelu Weibull AFT}\slidetable{../tables/08_best_aft_parameters.tex}\end{frame}
+\begin{frame}{Model Weibull AFT zredukowany}\slidetable{../tables/08b_reduced_aft_parameters.tex}\end{frame}
+\begin{frame}{Model pełny i zredukowany}\slidetable{../tables/08c_full_vs_reduced_aft.tex}\end{frame}
+\begin{frame}{Profile przeżycia w modelu AFT}\centering\widefig{08c_weibull_survival_profile.pdf}\\[-.3em]{\scriptsize Profil wysokiego ryzyka charakteryzuje się szybszym spadkiem funkcji przeżycia w modelu Weibull AFT zredukowanym.}\end{frame}
+\begin{frame}{Hazard w modelu AFT}\centering\widefig{08e_weibull_hazard_profile.pdf}\\[-.3em]{\scriptsize Profile ryzyka różnią się poziomem hazardu, przy podobnym kształcie przebiegu wynikającym ze wspólnego parametru rozkładu Weibulla.}\end{frame}
 \begin{frame}{Diagnostyka parametryczna}\centering\widefig{08b_probability_diagnostics.pdf}\end{frame}
 \begin{frame}{Ograniczenie liczby parametrów}
 Liczba zdarzeń ogranicza liczbę parametrów, które można stabilnie interpretować. Zbyt rozbudowany model może prowadzić do niestabilnych oszacowań, szerokich przedziałów ufności i nadmiernego dopasowania do próby.
@@ -193,8 +193,8 @@ T_i\sim Weibull(\rho,\lambda_i),\qquad \log\lambda_i=\beta_0+\beta^TX_i
 \]
 Cenzurowanie uwzględniono przez wkład $S(t_i|X_i)$ dla obserwacji bez zdarzenia.
 \end{frame}
-\begin{frame}{Posterior modelu bayesowskiego}\slidetable{../Tables/08d_bayes_posterior.tex}\end{frame}
-\begin{frame}{Traceploty MCMC}\centering\widefig{08d_bayes_traceplots_refreshed.pdf}\\[-.3em]{\scriptsize Średnia akceptacja MCMC wyniosła 0{,}5339, czyli przyjęto około 53{,}4\% proponowanych przejść algorytmu Metropolisa-Hastingsa. Taki poziom oznacza, że łańcuch eksploruje posterior bez nadmiernego odrzucania propozycji.}\end{frame}
+\begin{frame}{Posterior modelu bayesowskiego}\slidetable{../tables/08d_bayesian_posterior.tex}\end{frame}
+\begin{frame}{Traceploty MCMC}\centering\widefig{08d_bayesian_traceplots_refreshed.pdf}\\[-.3em]{\scriptsize Średnia akceptacja MCMC wyniosła 0{,}5339, czyli przyjęto około 53{,}4\% proponowanych przejść algorytmu Metropolisa-Hastingsa. Taki poziom oznacza, że łańcuch eksploruje posterior bez nadmiernego odrzucania propozycji.}\end{frame}
 \begin{frame}{Model Coxa}
 Model Coxa umożliwia wielowymiarową analizę wpływu zmiennych klinicznych na hazard zgonu bez konieczności parametryzacji hazardu bazowego. Ceną tej elastyczności jest konieczność weryfikacji założenia proporcjonalności hazardów.
 \end{frame}
@@ -204,38 +204,110 @@ h(t|X)=h_0(t)\exp(\beta^TX)
 \]
 $\exp(\beta_j)$ to hazard ratio dla jednostkowej zmiany zmiennej $X_j$, przy pozostałych zmiennych stałych.
 \end{frame}
-\begin{frame}{Wyniki modelu Coxa}\slidetable{../Tables/09_model_coxa.tex}\end{frame}
-\begin{frame}{Współczynniki modelu Coxa}\centering\widefig{09_cox_wspolczynniki.pdf}\\[-.3em]{\scriptsize Wartości dodatnie oznaczają wzrost hazardu, a ujemne jego spadek; poziome odcinki oznaczają przedziały ufności.}\end{frame}
+\begin{frame}{Wyniki modelu Coxa}\slidetable{../tables/09_cox_model.tex}\end{frame}
+\begin{frame}{Współczynniki modelu Coxa}\centering\widefig{09_cox_coefficients.pdf}\\[-.3em]{\scriptsize Wartości dodatnie oznaczają wzrost hazardu, a ujemne jego spadek; poziome odcinki oznaczają przedziały ufności.}\end{frame}
 \begin{frame}{Założenie proporcjonalnych hazardów}
 Poprawna kolejność analizy obejmuje estymację modelu Coxa, diagnostykę założenia PH, ewentualną modyfikację modelu i ponowną estymację. Naruszenie PH oznacza, że stałe hazard ratio może być interpretowane jedynie jako efekt uśredniony.
 \end{frame}
-\begin{frame}{Test proporcjonalności hazardów}\slidetable{../Tables/10_test_ph_coxa.tex}\vspace{-0.4em}{\scriptsize Test wskazuje na naruszenie założenia PH dla frakcji wyrzutowej na poziomie istotności 5\%.}\end{frame}
-\begin{frame}{Reszty Schoenfelda I}\centering\widefig{10_reszty_schoenfelda_1.pdf}\end{frame}
-\begin{frame}{Reszty Schoenfelda II}\centering\widefig{10_reszty_schoenfelda_2.pdf}\end{frame}
-\begin{frame}{Reszty Schoenfelda III}\centering\widefig{10_reszty_schoenfelda_3.pdf}\end{frame}
-\begin{frame}{Reszty Schoenfelda IV}\centering\widefig{10_reszty_schoenfelda_4.pdf}\end{frame}
-\begin{frame}{Reszty Schoenfelda V}\centering\widefig{10_reszty_schoenfelda_5.pdf}\end{frame}
-\begin{frame}{Model Coxa z interakcją czasową}\slidetable{../Tables/10b_cox_interakcja_czasowa.tex}\end{frame}
-\begin{frame}{Wyniki modelu Coxa z interakcją czasową}\slidetable{../Tables/10c_cox_interakcja_wyniki.tex}\end{frame}
-\begin{frame}{Test PH po dodaniu interakcji czasowej}\slidetable{../Tables/10d_test_ph_cox_interakcja.tex}\vspace{-0.4em}{\scriptsize Ponowny test służy ocenie, czy wprowadzenie efektu zależnego od czasu osłabiło sygnał naruszenia założenia proporcjonalności hazardów.}\end{frame}
-\begin{frame}{Obserwacje wpływowe}\slidetable{../Tables/11_obserwacje_wplywowe.tex}\vspace{-0.4em}{\scriptsize Miary delta-beta pokazują, jak zmieniłyby się współczynniki po usunięciu danej obserwacji.}\end{frame}
-\begin{frame}{Predykcja funkcji przeżycia z modelu Coxa}\centering\widefig{11_cox_profile_survival_three_risk.pdf}\\[-.3em]{\scriptsize Trzy klasy ryzyka pokazują praktyczną interpretację modelu Coxa: wraz z pogarszaniem profilu klinicznego przewidywana funkcja przeżycia opada coraz szybciej.}\end{frame}
-\begin{frame}{Predykcja funkcji hazardu z modelu Coxa}\centering\widefig{11b_cox_profile_hazard_three_risk.pdf}\\[-.3em]{\scriptsize Funkcja hazardu pokazuje bieżącą intensywność zdarzenia dla profili ryzyka. W modelu Coxa profile różnią się poziomem hazardu przez czynnik $\exp(\beta^T X)$, przy wspólnym hazardzie bazowym.}\end{frame}
-\begin{frame}{Porównanie klas modeli}\slidetable{../Tables/12_porownanie_syntetyczne_modeli.tex}\end{frame}
+\begin{frame}{Test proporcjonalności hazardów}\slidetable{../tables/10_cox_ph_test.tex}\vspace{-0.4em}{\scriptsize Test wskazuje na naruszenie założenia PH dla frakcji wyrzutowej na poziomie istotności 5\%.}\end{frame}
+\begin{frame}{Reszty Schoenfelda I}\centering\widefig{10_schoenfeld_residuals_1.pdf}\end{frame}
+\begin{frame}{Reszty Schoenfelda II}\centering\widefig{10_schoenfeld_residuals_2.pdf}\end{frame}
+\begin{frame}{Reszty Schoenfelda III}\centering\widefig{10_schoenfeld_residuals_3.pdf}\end{frame}
+\begin{frame}{Reszty Schoenfelda IV}\centering\widefig{10_schoenfeld_residuals_4.pdf}\end{frame}
+\begin{frame}{Reszty Schoenfelda V}\centering\widefig{10_schoenfeld_residuals_5.pdf}\end{frame}
+\begin{frame}{Reszty Schoenfelda z prostą}\centering\widefig{schoenfeld_residuals_v2_1.png}\end{frame}
+\begin{frame}{Reszty Schoenfelda z prostą}\centering\widefig{schoenfeld_residuals_v2_2.png}\end{frame}
+\begin{frame}{Wyniki modelu Coxa z interakcją czasową}\slidetable{../tables/10c_cox_time_interaction_results.tex}\end{frame}
+
+\begin{frame}{Interpretacja interakcji frakcji wyrzutowej z czasem}
+\small
+
+\[
+h(t\mid X)=h_0(t)\exp\left(
+\ldots+\beta_{\mathrm{EF}}\mathrm{EF}
++\beta_{\mathrm{EF},t}\mathrm{EF}\cdot g(t)
+\right),
+\qquad g(t)=\log(1+t).
+\]
+
+\[
+\beta_{\mathrm{EF}}(t)
+=
+\beta_{\mathrm{EF}}
++
+\beta_{\mathrm{EF},t}g(t),
+\qquad
+HR_{\mathrm{EF}}(t)
+=
+\exp\left(\beta_{\mathrm{EF}}+\beta_{\mathrm{EF},t}g(t)\right).
+\]
+
+\begin{itemize}
+    \item W modelu start--stop oszacowano:
+    \[
+    \beta_{\mathrm{EF}}=-0.0130,
+    \qquad
+    \beta_{\mathrm{EF},t}=-0.0023.
+    \]
+
+    \item Dla początku obserwacji, np. \(t=1\):
+    \[
+    HR_{\mathrm{EF}}(1)
+    =
+    \exp(-0.0130-0.0023\log 2)
+    \approx 0.985.
+    \]
+
+    \item Po około miesiącu, dla \(t=30\):
+    \[
+    HR_{\mathrm{EF}}(30)
+    =
+    \exp(-0.0130-0.0023\log 31)
+    \approx 0.979.
+    \]
+
+    \item W późniejszym okresie, dla \(t=100\):
+    \[
+    HR_{\mathrm{EF}}(100)
+    =
+    \exp(-0.0130-0.0023\log 101)
+    \approx 0.976.
+    \]
+
+\end{itemize}
+
+\end{frame}
+
+
+\begin{frame}{Interpretacja interakcji frakcji wyrzutowej z czasem}
+
+\begin{itemize}
+    \item Frakcja wyrzutowa ma efekt ochronny: wzrost o 1 punkt procentowy wiąże się z niższym hazardem zgonu.
+    \item Ujemny składnik czasowy sugeruje lekkie wzmacnianie efektu ochronnego w czasie, ale jego istotność jest graniczna \((p\approx 0.084)\).
+    \end{itemize}
+
+\end{frame}
+
+\begin{frame}{Model Coxa z interakcją czasową}\slidetable{../tables/10b_cox_time_interaction.tex}\end{frame}
+\begin{frame}{Predykcja funkcji przeżycia z modelu Coxa}\centering\widefig{11_cox_survival_three_risk_profiles.pdf}\\[-.3em]{\scriptsize Trzy klasy ryzyka pokazują praktyczną interpretację modelu Coxa: wraz z pogarszaniem profilu klinicznego przewidywana funkcja przeżycia opada coraz szybciej.}\end{frame}
+\begin{frame}{Predykcja funkcji hazardu z modelu Coxa}\centering\widefig{11b_cox_hazard_three_risk_profiles.pdf}\\[-.3em]{\scriptsize Funkcja hazardu pokazuje bieżącą intensywność zdarzenia dla profili ryzyka. W modelu Coxa profile różnią się poziomem hazardu przez czynnik $\exp(\beta^T X)$, przy wspólnym hazardzie bazowym.}\end{frame}
+\begin{frame}{Predykcja skumulowanego hazardu z modelu Coxa}\centering\widefig{12_additional_cox_prediction_output.png}\\\end{frame}
+\begin{frame}{Porównanie klas modeli}\slidetable{../tables/12_model_class_comparison.tex}\end{frame}
 \begin{frame}{Ograniczenia analizy}
 \begin{itemize}
+
 \item 299 obserwacji i 96 zdarzeń ogranicza liczbę stabilnie interpretowanych parametrów.
 \item Duży udział cenzurowania obniża precyzję estymacji w końcowym zakresie czasu.
 \item Założenie niezależnego cenzurowania nie jest w pełni weryfikowalne.
 \item Modele parametryczne zależą od wyboru rozkładu czasu przeżycia.
 \item Dla frakcji wyrzutowej występuje sygnał naruszenia założenia PH.
 \item Model bayesowski ma charakter demonstracyjny i obejmuje ograniczony zestaw zmiennych.
+
 \end{itemize}
 \end{frame}
 \begin{frame}{Elementy kontroli jakości analizy}
 \begin{itemize}
 \item Spójnie zdefiniowano czas, zdarzenie i cenzurowanie.
-\item Tabele i wykresy prezentacji są generowane w oficjalnych notebookach.
 \item Model AFT oceniono w wersji pełnej i zredukowanej.
 \item Model Coxa uzupełniono diagnostyką PH, resztami Schoenfelda i wariantem z efektem czasowym.
 \item Rozszerzenie bayesowskie obejmuje estymację MCMC i diagnostykę traceplotów.

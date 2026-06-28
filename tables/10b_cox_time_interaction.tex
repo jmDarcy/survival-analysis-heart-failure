@@ -1,6 +1,6 @@
 \begin{table}[htbp]
 \centering
-\caption{Porównanie modelu Coxa podstawowego i z interakcją czasową.}
+\caption{Porównanie modelu Coxa podstawowego i rozszerzonego o efekt frakcji wyrzutowej zależny od czasu.}
 \label{tab:cox-time}
 \small
 \setlength{\tabcolsep}{2.4pt}
@@ -8,8 +8,8 @@
 \toprule
 Model & logLik & AIC częściowy & Param. & C-index \\
 \midrule
-Cox podstawowy & -475.48 & 970.96 & 10 & 0.734 \\
-Cox z EF x log(t) & -419.18 & 860.36 & 11 & 0.931 \\
+Cox podstawowy & -471.28 & 962.57 & 10 & 0.734 \\
+Cox z EF $\times \log(1+t)$, $t=100$ & -490.46 & 1002.92 & 11 & 0.732 \\
 \bottomrule
 \end{tabular*}
 \end{table}
