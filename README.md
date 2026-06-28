@@ -2,327 +2,126 @@
 
 ## Overview
 
-This repository contains a coursework project in survival analysis based on the `heart_failure_clinical_records_dataset.csv` data set. The empirical problem is the modelling of time from clinical observation to death among patients with heart failure, with `time` measured in days and `DEATH_EVENT` used as the event indicator.
+This repository contains a survival analysis project based on the `heart_failure_clinical_records_dataset.csv` data set. The study focuses on modelling the time until death among patients with heart failure, using `time` as the duration variable and `DEATH_EVENT` as the event indicator.
 
-The final analytical sample contains 299 patients, including 96 observed deaths and 203 right-censored observations. Right censoring is therefore substantial: approximately 67.9% of patients did not experience the event during the observation window. This feature is central to the analysis, because it affects the precision of survival estimates, especially in the later part of follow-up.
+The data set contains 299 patient records. There are 96 observed deaths and 203 right-censored observations, so censoring is an important feature of the analysis. The project compares several approaches to survival modelling rather than relying on a single method.
 
-The project compares nonparametric, parametric, Bayesian and semiparametric survival models. The emphasis is not only on fitting models, but also on checking their assumptions, interpreting coefficient scales correctly, and comparing the conclusions obtained from different modelling frameworks.
+The repository is a cleaned and organised version of the final coursework project. It contains the analysis notebooks, corrected figures and tables, supplementary interpretation notes, and the final presentation materials.
 
-## Data and variables
+## Data
 
-The input file is stored in:
-
-```text
-data/heart_failure_clinical_records_dataset.csv
-```
-
-The data set contains 13 source variables and 299 observations. The main variables used in the analysis are:
+The analysis uses clinical and laboratory information about patients with heart failure. The most important variables include:
 
 * `time` — follow-up time in days;
-* `DEATH_EVENT` — event indicator, where `1` denotes death and `0` denotes right-censoring;
+* `DEATH_EVENT` — death indicator;
 * `age` — patient age;
 * `anaemia`, `diabetes`, `high_blood_pressure`, `sex`, `smoking` — binary clinical or demographic variables;
-* `ejection_fraction` — left ventricular ejection fraction;
+* `ejection_fraction` — heart ejection fraction;
 * `serum_creatinine` — serum creatinine level;
 * `serum_sodium` — serum sodium level;
 * `platelets` — platelet count;
 * `creatinine_phosphokinase` — CPK level.
 
-The analysis also uses the transformation
+The CPK variable is transformed into `log_cpk` because of its skewed distribution.
 
-$$
-\mathrm{log_cpk} = \log(\mathrm{CPK}+1),
-$$
+## Methods
 
-to reduce the influence of the highly right-skewed CPK variable.
+The project is divided into four main analytical parts.
 
-Selected descriptive statistics:
+### Nonparametric survival analysis
 
-| Variable          |   Mean | Median |    Min |    Max |
-| ----------------- | -----: | -----: | -----: | -----: |
-| age               |  60.83 |  60.00 |  40.00 |  95.00 |
-| ejection fraction |  38.08 |  38.00 |  14.00 |  80.00 |
-| serum creatinine  |   1.39 |   1.10 |   0.50 |   9.40 |
-| serum sodium      | 136.63 | 137.00 | 113.00 | 148.00 |
-| follow-up time    | 130.26 | 115.00 |   4.00 | 285.00 |
+The first part estimates survival patterns directly from the data. It includes:
 
-For subgroup analysis, several clinically interpretable binary splits are used:
+* Kaplan-Meier survival curves;
+* Nelson-Aalen cumulative hazard estimates;
+* actuarial life-table summaries;
+* survival comparisons between clinical subgroups;
+* log-rank and Wilcoxon tests.
 
-* `ejection_fraction < 35%`;
-* `serum_creatinine > 1.5`;
-* `serum_sodium < 135`;
-* presence of hypertension, anaemia, diabetes, smoking, and sex category.
+This part is used as an exploratory baseline. It shows which patient characteristics visibly separate survival curves before moving to regression models.
 
-## Analytical workflow
+The strongest subgroup differences are observed for low ejection fraction, elevated serum creatinine, low serum sodium, and hypertension.
 
-The project is organised into three modelling notebooks and a final Beamer presentation.
+### Parametric AFT models
 
-### 1. Nonparametric survival analysis
+The second part compares parametric accelerated failure time models. The fitted distributions include:
 
-The nonparametric notebook estimates survival and cumulative hazard without imposing a parametric distribution on event times.
+* Weibull;
+* log-normal;
+* log-logistic;
+* exponential baseline model.
 
-The main outputs are:
+The Weibull AFT model is selected as the main parametric model because it gives a good balance between fit, interpretability, and information criteria. A reduced Weibull model is also estimated to remove weak predictors and make the model more stable.
 
-* Kaplan-Meier survival curve for the full sample;
-* Nelson-Aalen cumulative hazard curve;
-* smoothed nonparametric hazard estimate;
-* actuarial life table using 30-day intervals;
-* Kaplan-Meier curves for clinically defined subgroups;
-* log-rank and Wilcoxon tests for equality of survival curves.
+The most relevant predictors in the AFT framework are age, ejection fraction, serum creatinine, hypertension, anaemia, and serum sodium.
 
-The actuarial life table shows a clear decline in survival probability across the observation window. In the first 30-day interval, 31 deaths are observed and the estimated interval survival is approximately 0.896. By the final interval, the life-table survival estimate is approximately 0.559.
+### Bayesian Weibull model
 
-The subgroup tests show the strongest univariate differences for:
+The Bayesian part is a simplified extension of the Weibull model. It focuses on three key predictors:
 
-| Variable                | Log-rank statistic | p-value |
-| ----------------------- | -----------------: | ------: |
-| ejection fraction < 35% |              30.63 | < 0.001 |
-| serum creatinine > 1.5  |              39.61 | < 0.001 |
-| serum sodium < 135      |              15.65 | < 0.001 |
-| high blood pressure     |               4.41 |   0.036 |
+* age;
+* ejection fraction;
+* serum creatinine.
 
-Anaemia is borderline in the univariate tests, while diabetes, sex and smoking do not produce meaningful separation of Kaplan-Meier curves in this sample.
+This model is mainly demonstrative. Its purpose is to show how survival analysis can be expressed in Bayesian terms and how uncertainty in the parameters can be analysed through posterior distributions.
 
-These nonparametric results are treated as exploratory evidence. They identify variables worth testing in regression models, but they do not control for multiple patient characteristics simultaneously.
+The Bayesian results are directionally consistent with the classical models: higher age and higher creatinine are associated with worse survival, while higher ejection fraction is associated with better survival.
 
-### 2. Parametric AFT models
+### Cox proportional hazards model
 
-The parametric part compares accelerated failure time models fitted under several distributional assumptions:
+The final modelling block uses the Cox proportional hazards model. This model estimates the effect of patient characteristics on the hazard of death without imposing a fully parametric distribution on survival times.
 
-* Weibull AFT;
-* log-normal AFT;
-* log-logistic AFT;
-* exponential model without covariates;
-* reduced Weibull AFT model.
+The Cox model confirms the importance of age, ejection fraction, serum creatinine, and hypertension. It also includes diagnostics based on Schoenfeld residuals and influence analysis.
 
-The AFT specification is written as
+One important diagnostic result is that the proportional hazards assumption is not perfectly satisfied for ejection fraction. For this reason, the project also tests a time-interaction extension. The extended model does not improve the overall fit enough to replace the baseline Cox model, but it helps interpret the diagnostic issue more carefully.
 
-$$
-\log(T_i)
-=========
+## Main findings
 
-\beta_0 + x_i^\top \beta + \sigma \varepsilon_i.
-$$
+Across the different modelling approaches, the results are broadly consistent.
 
-In an AFT model, the quantity
-
-$$
-\exp(\beta_j)
-$$
-
-is a time ratio, not a hazard ratio. Values above 1 lengthen the predicted survival time, while values below 1 shorten it, holding the other variables fixed.
-
-The likelihood contribution for an observation with time (t_i), covariates (x_i), and event indicator (\delta_i) is
-
-$$
-L_i
-===
-
-f(t_i \mid x_i)^{\delta_i}
-S(t_i \mid x_i)^{1-\delta_i}.
-$$
-
-This explicitly accounts for right-censored observations through the survival term (S(t_i \mid x_i)).
-
-The full parametric model comparison is:
-
-| Model                          |  logLik |     AIC |     BIC | Parameters |
-| ------------------------------ | ------: | ------: | ------: | ---------: |
-| Weibull AFT full               | -631.52 | 1287.04 | 1331.45 |         12 |
-| Log-normal AFT                 | -634.36 | 1292.72 | 1337.12 |         12 |
-| Log-logistic AFT               | -633.04 | 1290.09 | 1334.49 |         12 |
-| Weibull AFT reduced            | -632.13 | 1280.27 | 1309.87 |          8 |
-| Exponential without covariates | -672.54 | 1347.08 | 1350.78 |          1 |
-
-The full Weibull AFT model performs best among the full AFT candidates by AIC. The reduced Weibull AFT model improves the information criteria further by removing weak predictors.
-
-In the reduced Weibull AFT model, the main time-ratio effects are:
-
-| Variable            |  Coef. | Time ratio | p-value |
-| ------------------- | -----: | ---------: | ------: |
-| age                 | -0.045 |      0.956 | < 0.001 |
-| anaemia             | -0.405 |      0.667 |   0.055 |
-| ejection fraction   |  0.048 |      1.049 | < 0.001 |
-| high blood pressure | -0.496 |      0.609 |   0.021 |
-| serum creatinine    | -0.310 |      0.733 | < 0.001 |
-| serum sodium        |  0.044 |      1.045 |   0.068 |
-
-The estimated Weibull shape parameter is close to one, approximately
-
-$$
-\widehat{\rho} \approx 0.96,
-$$
-
-which suggests a hazard close to constant, or only mildly decreasing, over time.
-
-The probability plots show good marginal fit for all three candidate distributions. The log-normal plot has the highest graphical (R^2), but the regression-level information criteria favour Weibull AFT. This is an important modelling tension: graphical marginal fit and regression AIC do not have to select the same model.
-
-### 3. Bayesian Weibull extension
-
-The Bayesian part is included as a methodological extension rather than the main empirical model. It uses a simplified Weibull model with three key predictors:
-
-* `age`;
-* `ejection_fraction`;
-* `serum_creatinine`.
-
-The model is specified as
-
-$$
-T_i \sim \mathrm{Weibull}(\rho, \lambda_i),
-\qquad
-\log(\lambda_i)
-===============
-
-\beta_0 + x_i^\top \beta.
-$$
-
-The priors are
-
-$$
-\beta_j \sim N(0, 2.5^2),
-\qquad
-\log(\rho) \sim N(0,1).
-$$
-
-Right-censoring is handled by using the survival contribution (S(t_i \mid x_i)) for observations without an event.
-
-The posterior summary supports the same qualitative direction as the classical AFT models:
-
-| Parameter         |   Mean |   2.5% |  97.5% | (P(\beta>0)) |
-| ----------------- | -----: | -----: | -----: | -----------: |
-| age               | -0.592 | -0.917 | -0.379 |        0.000 |
-| ejection fraction |  0.701 |  0.381 |  1.114 |        1.000 |
-| serum creatinine  | -0.404 | -0.562 | -0.246 |        0.000 |
-| log rho           | -0.124 | -0.326 |  0.057 |        0.106 |
-
-The Bayesian model is deliberately narrower than the full classical models. Its role is to illustrate posterior uncertainty and probabilistic interpretation of effects, not to replace the full AFT or Cox analyses.
-
-### 4. Cox proportional hazards model and diagnostics
-
-The semiparametric part fits a Cox proportional hazards model:
-
-$$
-h(t \mid x)
-===========
-
-h_0(t)\exp(x^\top \beta).
-$$
-
-Here (h_0(t)) is left unspecified, while (\exp(\beta_j)) is interpreted as a hazard ratio for a one-unit increase in (x_j), holding the other covariates fixed.
-
-The main Cox model estimates are:
-
-| Variable            |  Coef. |    HR | p-value |
-| ------------------- | -----: | ----: | ------: |
-| age                 |  0.038 | 1.039 | < 0.001 |
-| ejection fraction   | -0.039 | 0.962 | < 0.001 |
-| serum creatinine    |  0.294 | 1.342 | < 0.001 |
-| serum sodium        | -0.041 | 0.960 |   0.058 |
-| anaemia             |  0.337 | 1.401 |   0.086 |
-| diabetes            |  0.072 | 1.075 |   0.721 |
-| high blood pressure |  0.401 | 1.493 |   0.045 |
-| sex                 | -0.115 | 0.891 |   0.600 |
-| smoking             |  0.085 | 1.088 |   0.705 |
-| log(CPK+1)          |  0.048 | 1.050 |   0.588 |
-
-The strongest and most stable predictors in the Cox model are age, ejection fraction and serum creatinine. Hypertension remains significant at the 5% level, while anaemia and sodium are borderline.
-
-The proportional hazards assumption is tested using Schoenfeld-residual-based diagnostics. The test identifies a violation for `ejection_fraction`:
-
-| Variable          | Chi-square | p-value |
-| ----------------- | ---------: | ------: |
-| ejection fraction |      4.227 |   0.040 |
-
-This means that the Cox hazard ratio for ejection fraction should be interpreted cautiously as an average effect over time rather than as a strictly constant hazard ratio.
-
-A time-interaction extension is fitted using an interaction between ejection fraction and a log-time transformation. The comparison is:
-
-| Model                    |  logLik | Partial AIC | Parameters | C-index |
-| ------------------------ | ------: | ----------: | ---------: | ------: |
-| Cox baseline             | -471.28 |      962.57 |         10 |   0.734 |
-| Cox with EF × log(1 + t) | -490.46 |     1002.92 |         11 |   0.732 |
-
-The time-interaction model does not improve the overall fit according to partial AIC or concordance. The baseline Cox model is therefore retained as the main semiparametric model, with an explicit caveat about the time-varying effect of ejection fraction.
-
-The Cox notebook also includes:
-
-* coefficient plots on the log hazard-ratio scale;
-* Schoenfeld residual diagnostics;
-* delta-beta influence analysis;
-* predicted survival curves for low-, medium- and high-risk patient profiles;
-* predicted hazard profiles under the fitted Cox model.
-
-## Main empirical conclusions
-
-The different modelling approaches produce a coherent risk ranking.
-
-The variables most consistently associated with worse survival are:
+The variables most clearly associated with worse survival are:
 
 * higher age;
 * lower ejection fraction;
 * higher serum creatinine;
 * hypertension;
-* anaemia, with weaker statistical support;
-* lower serum sodium, with borderline support.
+* possibly anaemia and lower serum sodium, although these effects are weaker.
 
-The nonparametric analysis shows strong univariate separation for low ejection fraction, high creatinine and low sodium. The AFT models translate these differences into survival-time ratios. The Cox model confirms the same broad structure using hazard ratios, while also requiring diagnostic qualification because the proportional hazards assumption is not fully satisfied for ejection fraction.
+The project also shows that model diagnostics matter. The Cox model gives interpretable hazard ratios, but the proportional hazards assumption should not be accepted automatically. Similarly, parametric AFT models are useful for prediction and scenario analysis, but their conclusions depend on the assumed survival-time distribution.
 
-The project should therefore be read as a methodological survival-analysis study, not as a clinical decision system. The sample is small, the number of observed deaths is limited, censoring is substantial, and no external validation is performed.
+The analysis should be treated as a methodological coursework project rather than a clinical decision model. The sample is small, the number of observed deaths is limited, and no external validation data set is used.
 
 ## Repository structure
 
 ```text
-data/
-    heart_failure_clinical_records_dataset.csv
-
-notebooks/
-    01_nonparametric_survival_analysis.ipynb
-    02_parametric_and_bayesian_survival_models.ipynb
-    03_cox_semiparametric_model_diagnostics.ipynb
-
-presentation/
-    main.tex
-    survival_analysis_presentation.pdf
-
-reports/
-    interpretation_notes.pdf
-
-tables/
-    corrected LaTeX tables used in the presentation
-
-figures/
-    corrected model, survival, hazard and diagnostic figures
-
-results/
-    compact run summary metadata
+data/                         input heart-failure data set
+notebooks/                    final executable analysis notebooks
+presentation/                 Beamer source and final presentation PDF
+reports/                      supplementary interpretation notes
+tables/                       corrected result tables
+figures/                      corrected model and diagnostic figures
+results/                      compact run summary metadata
 ```
 
 ## Recommended review order
 
-1. `presentation/survival_analysis_presentation.pdf` — final presentation and high-level narrative.
-2. `notebooks/01_nonparametric_survival_analysis.ipynb` — Kaplan-Meier, Nelson-Aalen, life table and subgroup tests.
-3. `notebooks/02_parametric_and_bayesian_survival_models.ipynb` — AFT models, distributional comparison and Bayesian Weibull extension.
-4. `notebooks/03_cox_semiparametric_model_diagnostics.ipynb` — Cox model, diagnostics, Schoenfeld residuals, influence analysis and risk profiles.
+1. `presentation/survival_analysis_presentation.pdf` — final project presentation.
+2. `notebooks/01_nonparametric_survival_analysis.ipynb` — Kaplan-Meier, Nelson-Aalen, life table, and subgroup tests.
+3. `notebooks/02_parametric_and_bayesian_survival_models.ipynb` — AFT models and Bayesian Weibull extension.
+4. `notebooks/03_cox_semiparametric_model_diagnostics.ipynb` — Cox model, diagnostics, and predicted risk profiles.
 5. `reports/interpretation_notes.pdf` — supplementary interpretation notes.
 
 ## Reproducibility
 
-Install the Python dependencies:
+Install the required Python dependencies:
 
 ```bash
 pip install -r requirements.txt
 ```
 
-Run the notebooks from the repository root so that relative paths resolve correctly:
+Run the notebooks from the repository root so that relative paths resolve correctly.
 
-```text
-data/
-tables/
-figures/
-results/
-```
-
-The presentation can be rebuilt from the `presentation/` directory with a LaTeX installation that supports Beamer:
+The presentation can be rebuilt from the `presentation/` directory:
 
 ```bash
 cd presentation
@@ -330,38 +129,32 @@ pdflatex main.tex
 pdflatex main.tex
 ```
 
-## Outputs
+## Main outputs
 
-The repository contains the following main outputs:
+The repository contains:
 
-* Kaplan-Meier survival curves for the full sample and clinical subgroups;
-* Nelson-Aalen cumulative hazard estimates;
-* actuarial life table for 30-day intervals;
-* log-rank and Wilcoxon tests for subgroup comparisons;
+* survival curves for the full sample and selected subgroups;
+* cumulative hazard estimates;
+* actuarial life-table summaries;
+* nonparametric tests for subgroup differences;
 * AFT model comparison tables;
-* Weibull AFT full and reduced model estimates;
-* probability plots for Weibull, log-normal and log-logistic distributions;
-* predicted survival and hazard profiles from AFT models;
-* Bayesian Weibull posterior summary and traceplots;
-* Cox model coefficient table and log hazard-ratio plot;
-* proportional hazards diagnostics based on Schoenfeld residuals;
-* Cox model with time interaction for ejection fraction;
-* delta-beta influence diagnostics;
-* predicted Cox survival and hazard profiles for patient risk classes.
+* Weibull AFT estimates and prediction profiles;
+* Bayesian posterior summaries and traceplots;
+* Cox model estimates;
+* proportional hazards diagnostics;
+* influence diagnostics;
+* predicted survival and hazard profiles.
 
 ## Limitations
 
-The main limitations are:
+The main limitations of the project are:
 
-* only 299 observations are available;
-* only 96 deaths are observed;
-* 203 observations are right-censored;
-* the analysis assumes independent censoring;
-* later survival estimates are less precise because the risk set becomes smaller;
-* parametric AFT conclusions depend on the selected event-time distribution;
-* the Cox model shows a proportional hazards violation for `ejection_fraction`;
-* the Bayesian model is simplified and should be treated as demonstrative;
-* no external validation sample is used.
+* small sample size;
+* limited number of observed deaths;
+* high share of right-censored observations;
+* no external validation sample;
+* sensitivity of parametric models to distributional assumptions;
+* partial violation of the proportional hazards assumption in the Cox model.
 
 ## References
 
